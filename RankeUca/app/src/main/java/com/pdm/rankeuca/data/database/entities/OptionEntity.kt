@@ -3,13 +3,28 @@ package com.pdm.rankeuca.data.database.entities
 import androidx.room.PrimaryKey
 import androidx.room.Entity
 import com.pdm.rankeuca.data.model.Option
+import androidx.room.ForeignKey
+import androidx.room.Index
 
-@Entity(tableName = "options")
+
+@Entity(
+    tableName = "options",
+    foreignKeys = [
+        ForeignKey(
+            entity = QuestionEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["questionId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ],
+    indices = [Index("questionId")]
+)
 data class OptionEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,
     val imageUrl: String,
+    val questionId: Int,
 )
 
 fun OptionEntity.toModel(): Option {
@@ -17,13 +32,6 @@ fun OptionEntity.toModel(): Option {
         id = id,
         name = name,
         imageUrl = imageUrl,
-    )
-}
-
-fun Option.toEntity(): OptionEntity {
-    return OptionEntity(
-        id = id,
-        name = name,
-        imageUrl = imageUrl,
+        questionId = questionId,
     )
 }

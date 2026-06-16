@@ -1,7 +1,7 @@
 package com.pdm.rankeuca.data.repository
 
 import com.pdm.rankeuca.data.database.dao.OptionDao
-import com.pdm.rankeuca.data.database.entities.toEntity
+import com.pdm.rankeuca.data.model.toEntity
 import com.pdm.rankeuca.data.database.entities.toModel
 import com.pdm.rankeuca.data.model.Option
 import kotlinx.coroutines.flow.Flow
@@ -11,13 +11,14 @@ class OptionRepositoryImpl(
     private val optionDao: OptionDao
 ) : OptionRepository {
 
-    override fun getOptions(): Flow<List<Option>> {
-        return optionDao.getAllOptions().map { entities ->
+    override fun getOptions(questionId: Int): Flow<List<Option>> {
+        return optionDao.getOptionsForQuestion(questionId).map { entities ->
             entities.map { it.toModel() }
         }
     }
 
-    override suspend fun addOption(option: Option) {
+    override suspend fun addOption(name: String, imageUrl: String, questionId: Int) {
+        val option = Option(name = name, imageUrl = imageUrl, questionId = questionId)
         optionDao.insertOption(option.toEntity())
     }
 

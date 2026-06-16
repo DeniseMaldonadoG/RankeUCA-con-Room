@@ -8,25 +8,23 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Inbox
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.pdm.rankeuca.screen.Option.OptionBottomSheet
-import com.pdm.rankeuca.screen.Option.OptionsViewModel
 
-
+import androidx.compose.runtime.saveable.rememberSaveable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OptionsScreen(
-    viewModel: OptionsViewModel = viewModel(factory = OptionsViewModel.Factory)
+    questionId: Int,
+    onVolver: () -> Unit,
+    viewModel: OptionsViewModel = viewModel(
+        factory = OptionsViewModel.provideFactory(questionId)
+    )
 ) {
     val options by viewModel.options.collectAsStateWithLifecycle()
     var showSheet by rememberSaveable { mutableStateOf(false) }
@@ -47,6 +45,14 @@ fun OptionsScreen(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
             )
+        },
+        bottomBar = {
+            Button(
+                onClick = onVolver,
+                modifier = Modifier.fillMaxWidth().padding(16.dp)
+            ) {
+                Text("Volver ←")
+            }
         }
     ) { innerPadding ->
         Column(
@@ -55,7 +61,6 @@ fun OptionsScreen(
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
-
             if (options.isEmpty()) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -70,7 +75,7 @@ fun OptionsScreen(
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = "Todavia no hay opciones",
+                        text = "Todavía no hay opciones",
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(

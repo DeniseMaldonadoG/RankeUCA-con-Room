@@ -1,6 +1,21 @@
 package com.pdm.rankeuca.router
 
-sealed class Routes {
-    object Options : Routes()
 
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
+
+sealed class Routes : NavKey {
+    @Serializable
+    data object Home : Routes()
+
+    @Serializable
+    data object Resultados : Routes()
+
+
+    @Serializable
+    data object Options : Routes()
+
+    @Serializable
+    data object Questions : Routes()
 }
+

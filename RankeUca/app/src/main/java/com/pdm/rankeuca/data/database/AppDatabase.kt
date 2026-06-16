@@ -6,15 +6,19 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.pdm.rankeuca.data.database.dao.OptionDao
 import com.pdm.rankeuca.data.database.entities.OptionEntity
+import com.pdm.rankeuca.data.database.dao.QuestionDao
+import com.pdm.rankeuca.data.database.entities.QuestionEntity
+
 
 
 @Database(
-    entities = [OptionEntity::class],
-    version = 1,
+    entities = [QuestionEntity::class, OptionEntity::class],
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
+    abstract fun questionDao(): QuestionDao
     abstract fun optionDao(): OptionDao
 
     companion object {

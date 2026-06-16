@@ -12,8 +12,8 @@ import androidx.room.Query
 @Dao
 interface OptionDao {
 
-    @Query("SELECT * FROM options")
-    fun getAllOptions(): Flow<List<OptionEntity>>
+    @Query("SELECT * FROM options WHERE questionId = :questionId")
+    fun getOptionsForQuestion(questionId: Int): Flow<List<OptionEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOption(option: OptionEntity)
@@ -21,3 +21,4 @@ interface OptionDao {
     @Delete
     suspend fun deleteOption(option: OptionEntity)
 }
+
